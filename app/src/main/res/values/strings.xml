@@ -11,4 +11,8 @@
     <string name="power_value">500 cv</string>
     <string name="recharge">Recharge</string>
     <string name="recharge_value">30 min</string>
+    <string name="kwh_price">kWh Price</string>
+    <string name="traveled_km">Traveled Km</string>
+    <string name="calculate">Calculate</string>
+    <string name="result">result</string>
 </resources>
