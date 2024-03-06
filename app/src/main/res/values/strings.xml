@@ -15,4 +15,5 @@
     <string name="traveled_km">Traveled Km</string>
     <string name="calculate">Calculate</string>
     <string name="result">result</string>
+    <string name="calculate_autonomy">Calculate Autonomy</string>
 </resources>
