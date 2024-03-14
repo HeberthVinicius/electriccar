@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.eletriccarapp"
+    namespace = "com.example.electriccarapp"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.eletriccarapp"
+        applicationId = "com.example.electriccarapp"
         minSdk = 24
         targetSdk = 34
         versionCode = 1

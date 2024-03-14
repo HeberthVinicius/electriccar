@@ -1,4 +1,4 @@
-package com.example.eletriccarapp.presentation
+package com.example.electriccarapp.ui
 
 import android.os.Bundle
 import android.widget.Button
@@ -6,12 +6,12 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import com.example.eletriccarapp.R
+import com.example.electriccarapp.R
 
 class CalculateAutonomyActivity : AppCompatActivity() {
     lateinit var returnArrow: ImageView
     lateinit var kWhPrice: EditText
-    lateinit var traveledkm: EditText
+    lateinit var traveledKm: EditText
     lateinit var btnCalculate: Button
     lateinit var result: TextView
 
@@ -25,7 +25,7 @@ class CalculateAutonomyActivity : AppCompatActivity() {
 
     private fun setUpViews(){
         kWhPrice = findViewById(R.id.et_kwh_price)
-        traveledkm = findViewById(R.id.et_traveled_km)
+        traveledKm = findViewById(R.id.et_traveled_km)
         btnCalculate = findViewById(R.id.btn_calculate)
         result = findViewById(R.id.tv_result)
         returnArrow = findViewById(R.id.iv_return_arrow)
@@ -34,9 +34,9 @@ class CalculateAutonomyActivity : AppCompatActivity() {
     private fun setUpListeners() {
         btnCalculate.setOnClickListener{
             val typedPrice = kWhPrice.text.toString().toFloat()
-            val typedKm = traveledkm.text.toString().toFloat()
+            val typedKm = traveledKm.text.toString().toFloat()
 
-            result.setText(calculate(typedPrice, typedKm).toString())
+            result.text = calculate(typedPrice, typedKm).toString()
         }
 
         returnArrow.setOnClickListener{
@@ -44,8 +44,7 @@ class CalculateAutonomyActivity : AppCompatActivity() {
         }
     }
 
-    fun calculate(x: Float, y: Float) : Float {
-        val calcResult = x / y
-        return calcResult
+    private fun calculate(x: Float, y: Float): Float {
+        return x / y
     }
 }
