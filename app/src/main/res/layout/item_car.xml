@@ -28,7 +28,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="28dp"
-                android:src="@drawable/electric_car"
+                android:src="@drawable/img_electric_car"
                 android:contentDescription="@string/car_imageview"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
