@@ -7,10 +7,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.example.electriccarapp.R
-import com.example.electriccarapp.data.CarFactory
 import com.example.electriccarapp.domain.Car
 import com.example.electriccarapp.ui.adapter.CarAdapter
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -25,8 +25,10 @@ import java.net.URL
 import java.net.URLConnection
 
 class CarsFragment : Fragment() {
+
     lateinit var carList: RecyclerView
     lateinit var fabCalculate: FloatingActionButton
+    lateinit var progressBar: ProgressBar
 
     var carsArray: ArrayList<Car> = ArrayList()
 
@@ -40,25 +42,26 @@ class CarsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        callService()
         setUpViews(view)
         setUpListeners()
+        callService()
     }
 
     private fun setUpViews(view: View){
         view.apply {
             carList = findViewById(R.id.rv_information)
             fabCalculate = findViewById(R.id.fab_calculate)
+            progressBar = findViewById(R.id.pb_loader)
         }
     }
 
     private fun setUpList() {
+        carList.visibility = View.VISIBLE
         val adapter = CarAdapter(carsArray)
         carList.adapter = adapter
     }
 
     private fun setUpListeners() {
-
         fabCalculate.setOnClickListener{
             startActivity(Intent(context , CalculateAutonomyActivity::class.java))
         }
@@ -75,6 +78,7 @@ class CarsFragment : Fragment() {
         override fun onPreExecute() {
             super.onPreExecute()
             Log.d("MyTask", "Iniciando...")
+            progressBar.visibility = View.VISIBLE
         }
 
         override fun doInBackground(vararg url: String?): String {
@@ -142,6 +146,7 @@ class CarsFragment : Fragment() {
                     )
                     carsArray.add(model)
                 }
+                progressBar.visibility = View.GONE
                 setUpList()
 
             }catch (ex: Exception) {
