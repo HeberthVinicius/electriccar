@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ElectricCarApp</string>
+    <string name="electric_car">Carro Eletrico</string>
+    <string name="price">Preço</string>
+    <string name="favorites">Favoritos</string>
+    <string name="battery">Bateria</string>
+    <string name="power">Potência</string>
+    <string name="power_value">500 cv</string>
+    <string name="recharge">Recarga</string>
+    <string name="calculate">Calcular</string>
+    <string name="calculate_autonomy">Calcular Autonomia</string>
+    <string name="cars">Carros</string>
+    <string name="iv_empty_state">Desculpe, conexão indisponível!</string>
+</resources>

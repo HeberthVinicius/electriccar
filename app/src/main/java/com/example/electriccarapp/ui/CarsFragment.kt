@@ -11,9 +11,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.ProgressBar
+import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
+import androidx.transition.Visibility
 import com.example.electriccarapp.R
 import com.example.electriccarapp.domain.Car
 import com.example.electriccarapp.ui.adapter.CarAdapter
@@ -33,6 +37,9 @@ class CarsFragment : Fragment() {
     lateinit var carList: RecyclerView
     lateinit var fabCalculate: FloatingActionButton
     lateinit var progressBar: ProgressBar
+    lateinit var noInternetConnectionImage: ImageView
+    lateinit var noInternetConnectionText: TextView
+
 
     var carsArray: ArrayList<Car> = ArrayList()
 
@@ -48,8 +55,22 @@ class CarsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setUpViews(view)
         setUpListeners()
-        checkForInternet(context)
-        callService()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (checkForInternet(context)) {
+            callService()
+        } else {
+            emptyState()
+        }
+    }
+
+    fun emptyState() {
+        progressBar.isVisible = false
+        carList.isVisible = false
+        noInternetConnectionImage.isVisible = true
+        noInternetConnectionText.isVisible = true
     }
 
     private fun setUpViews(view: View){
@@ -57,6 +78,8 @@ class CarsFragment : Fragment() {
             carList = findViewById(R.id.rv_information)
             fabCalculate = findViewById(R.id.fab_calculate)
             progressBar = findViewById(R.id.pb_loader)
+            noInternetConnectionImage = findViewById(R.id.iv_empty_state)
+            noInternetConnectionText = findViewById(R.id.tv_empty_state)
         }
     }
 
@@ -82,9 +105,7 @@ class CarsFragment : Fragment() {
             context?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-
             val network = connectivityManager.activeNetwork ?: return false
-
             val activeNetwork = connectivityManager.getNetworkCapabilities(network) ?: return false
 
             return when {
@@ -103,7 +124,7 @@ class CarsFragment : Fragment() {
         override fun onPreExecute() {
             super.onPreExecute()
             Log.d("MyTask", "Iniciando...")
-            progressBar.visibility = View.VISIBLE
+            progressBar.isVisible = true
         }
 
         override fun doInBackground(vararg url: String?): String {
@@ -171,7 +192,9 @@ class CarsFragment : Fragment() {
                     )
                     carsArray.add(model)
                 }
-                progressBar.visibility = View.GONE
+                progressBar.isVisible = false
+                noInternetConnectionImage.isVisible = false
+                noInternetConnectionText.isVisible = false
                 setUpList()
 
             }catch (ex: Exception) {

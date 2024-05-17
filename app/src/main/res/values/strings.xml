@@ -8,7 +8,7 @@
     <string name="battery">Battery</string>
     <string name="battery_value">300 kWh</string>
     <string name="power">Power</string>
-    <string name="power_value">500 cv</string>
+    <string name="power_value">500 hp</string>
     <string name="recharge">Recharge</string>
     <string name="recharge_value">30 min</string>
     <string name="kwh_price">kWh Price</string>
@@ -18,4 +18,5 @@
     <string name="calculate_autonomy">Calculate Autonomy</string>
     <string name="car_imageview">car imageView</string>
     <string name="float_button">float_button</string>
+    <string name="iv_empty_state">Sorry, connection unavailable!</string>
 </resources>
