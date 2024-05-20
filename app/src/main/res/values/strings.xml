@@ -19,4 +19,5 @@
     <string name="car_imageview">car imageView</string>
     <string name="float_button">float_button</string>
     <string name="iv_empty_state">Sorry, connection unavailable!</string>
+    <string name="response_error">"Unable to load data"</string>
 </resources>

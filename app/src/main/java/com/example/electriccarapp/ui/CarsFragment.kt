@@ -14,17 +14,24 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import androidx.transition.Visibility
 import com.example.electriccarapp.R
+import com.example.electriccarapp.data.CarsApi
 import com.example.electriccarapp.domain.Car
 import com.example.electriccarapp.ui.adapter.CarAdapter
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.json.JSONArray
 import org.json.JSONObject
 import org.json.JSONTokener
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import java.io.BufferedReader
 import java.io.InputStream
 import java.io.InputStreamReader
@@ -39,6 +46,7 @@ class CarsFragment : Fragment() {
     lateinit var progressBar: ProgressBar
     lateinit var noInternetConnectionImage: ImageView
     lateinit var noInternetConnectionText: TextView
+    lateinit var carsApi: CarsApi
 
 
     var carsArray: ArrayList<Car> = ArrayList()
@@ -53,6 +61,7 @@ class CarsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupRetroFit()
         setUpViews(view)
         setUpListeners()
     }
@@ -60,13 +69,44 @@ class CarsFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         if (checkForInternet(context)) {
-            callService()
+            //callService() //Tratamamento de chamadas HTTP substituído pela implementação do Retrofit
+            getAllCars()
         } else {
             emptyState()
         }
     }
 
-    fun emptyState() {
+    private fun setupRetroFit() {
+        val retrofit = Retrofit.Builder()
+            .baseUrl("https://heberthvinicius.github.io/APITestElectricCar/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+        carsApi = retrofit.create(CarsApi::class.java)
+    }
+
+    fun getAllCars() {
+        carsApi.getAllCars().enqueue(object : Callback<List<Car>>{
+            override fun onResponse(call: Call<List<Car>>, response: Response<List<Car>>) {
+                if (response.isSuccessful) {
+                    progressBar.isVisible = false
+                    noInternetConnectionImage.isVisible = false
+                    noInternetConnectionText.isVisible = false
+                    response.body()?.let {
+                        setUpList(it)
+                    }
+                } else {
+                    Toast.makeText(context,  R.string.response_error, Toast.LENGTH_LONG).show()
+                }
+            }
+
+            override fun onFailure(call: retrofit2.Call<List<Car>>, t: Throwable) {
+                Toast.makeText(context,  R.string.response_error, Toast.LENGTH_LONG).show()
+                //emptyState()
+            }
+        })
+    }
+
+    private fun emptyState() {
         progressBar.isVisible = false
         carList.isVisible = false
         noInternetConnectionImage.isVisible = true
@@ -83,10 +123,12 @@ class CarsFragment : Fragment() {
         }
     }
 
-    private fun setUpList() {
-        carList.visibility = View.VISIBLE
-        val adapter = CarAdapter(carsArray)
-        carList.adapter = adapter
+    private fun setUpList(lista: List<Car>) {
+        val carAdapter = CarAdapter(lista)
+        carList.apply {
+            isVisible = true
+            adapter = carAdapter
+        }
     }
 
     private fun setUpListeners() {
@@ -95,10 +137,11 @@ class CarsFragment : Fragment() {
         }
     }
 
-    private fun callService() {
-        val urlBase = "https://heberthvinicius.github.io/APITestElectricCar/cars.json"
-        MyTask().execute(urlBase)
-    }
+    //Substituído pela implementação do Retrofit
+//    private fun callService() {
+//        val urlBase = "https://heberthvinicius.github.io/APITestElectricCar/cars.json"
+//        MyTask().execute(urlBase)
+//    }
 
     fun checkForInternet(context: Context?) : Boolean {
         val connectivityManager =
@@ -119,6 +162,7 @@ class CarsFragment : Fragment() {
         }
     }
 
+    // Utilizar o retrofit como abstração do AsyncTask
     inner class MyTask : AsyncTask<String, String, String>() {
 
         override fun onPreExecute() {
@@ -195,7 +239,7 @@ class CarsFragment : Fragment() {
                 progressBar.isVisible = false
                 noInternetConnectionImage.isVisible = false
                 noInternetConnectionText.isVisible = false
-                setUpList()
+                //setUpList()
 
             }catch (ex: Exception) {
                 Log.e("Erro ->", ex.message.toString())

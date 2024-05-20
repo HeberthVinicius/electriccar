@@ -12,4 +12,5 @@
     <string name="calculate_autonomy">Calcular Autonomia</string>
     <string name="cars">Carros</string>
     <string name="iv_empty_state">Desculpe, conexão indisponível!</string>
+    <string name="response_error">Não foi possível carregar os dados</string>
 </resources>
